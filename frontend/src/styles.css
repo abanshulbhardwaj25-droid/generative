@@ -1,0 +1,231 @@
+/* ===========================
+   General Reset & Fonts
+=========================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===========================
+   Header
+=========================== */
+.app-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background: linear-gradient(90deg, #4f46e5, #3b82f6);
+  color: white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left .logo {
+  font-size: 1.8rem;
+}
+
+.header-left h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.header-menu a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.header-menu a:hover {
+  color: #a5b4fc;
+}
+
+/* ===========================
+   Chat Card
+=========================== */
+.chat-card {
+  width: 80%;
+  max-width: 850px;
+  min-height: 79vh;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 20px auto 30px auto;
+}
+
+/* Messages Area */
+.messages {
+  flex: 1;                  
+  padding: 20px;
+  overflow-y: auto;         
+  overflow-x: hidden;       
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Slightly smaller gap for compact look */
+  word-wrap: break-word;
+}
+
+/* ===========================
+   Message Bubbles with Avatar
+=========================== */
+.message-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* Bot Message (left) */
+.message-wrapper.bot {
+  justify-content: flex-start;
+}
+
+.message-wrapper.bot .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: #e5e5ea;
+}
+
+/* User Message (right) */
+.message-wrapper.user {
+  justify-content: flex-end;
+}
+
+.message-wrapper.user .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: #4f46e5;
+  color: white;
+}
+
+/* Generic Bubble Styling */
+.bubble {
+  max-width: 70%;
+  padding: 10px 14px; /* Slightly smaller padding for elegance */
+  border-radius: 18px;
+  position: relative;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  word-wrap: break-word;
+  font-size: 0.9rem;      /* Smaller, elegant font size */
+  line-height: 1.4;
+}
+
+/* Bot Bubble Background */
+.message-wrapper.bot .bubble {
+  background: #e5e5ea;
+  color: black;
+}
+
+/* User Bubble Background */
+.message-wrapper.user .bubble {
+  background: #4f46e5;
+  color: white;
+}
+
+/* Thinking Animation */
+.bubble.thinking {
+  background: #d1d5db;
+  color: #374151;
+  font-style: italic;
+  display: flex;
+  gap: 5px;
+  padding: 8px 12px; /* Slightly smaller padding for elegant look */
+}
+
+.bubble.thinking span {
+  width: 6px;
+  height: 6px;
+  background-color: #374151;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.bubble.thinking span:nth-child(1) { animation-delay: 0s; }
+.bubble.thinking span:nth-child(2) { animation-delay: 0.2s; }
+.bubble.thinking span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* ===========================
+   Input Area
+=========================== */
+.input-area {
+  display: flex;
+  gap: 12px;
+  padding: 12px 15px; /* Slightly smaller padding */
+  border-top: 1px solid #ddd;
+  background: #f9f9f9;
+  flex-shrink: 0;            
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 0.9rem; /* Smaller, elegant font */
+  min-width: 0;              
+}
+
+.input-area button {
+  padding: 10px 20px; /* Smaller button */
+  border: none;
+  border-radius: 25px;
+  background: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem; /* Smaller text on button */
+}
+
+.input-area button:hover {
+  background: #3b82f6;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+@media (max-width: 650px) {
+  .header-menu a { margin-left: 12px; font-size: 0.8rem; }
+  .header-left h1 { font-size: 1.1rem; }
+  .chat-card { width: 95%; min-height: 50vh; }
+  .input-area input { font-size: 0.85rem; }
+  .message-wrapper .bubble { max-width: 80%; font-size: 0.85rem; }
+}
