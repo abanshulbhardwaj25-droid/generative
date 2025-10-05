@@ -8,7 +8,7 @@ function App() {
       <header className="app-header">
         <div className="header-left">
           <div className="logo">🤖</div>
-          <h1>AI Chatbot</h1>
+          <h1>PB- Anshul</h1>
         </div>
         <nav className="header-menu">
           <a href="#home">Home</a>

@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "../styles.css";
 
-const BOT_NAME = "GrokBot"; // Bot name define
+const BOT_NAME = "GrokBot";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [isThinking, setIsThinking] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to latest message
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -25,7 +25,6 @@ const Chat = () => {
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
-    setIsThinking(true);
     const thinkingMsg = { text: "", type: "bot", thinking: true };
     setMessages((prev) => [...prev, thinkingMsg]);
 
@@ -38,11 +37,7 @@ const Chat = () => {
       const data = await res.json();
 
       let botText = data.reply.reply || "Sorry, no reply.";
-
-      // Ensure bot name not duplicated
-      if (botText.startsWith(`${BOT_NAME}: `)) {
-        botText = botText.replace(`${BOT_NAME}: `, "");
-      }
+      if (botText.startsWith(`${BOT_NAME}: `)) botText = botText.replace(`${BOT_NAME}: `, "");
 
       setMessages((prev) =>
         prev.map((msg) =>
@@ -51,7 +46,7 @@ const Chat = () => {
             : msg
         )
       );
-    } catch (err) {
+    } catch {
       setMessages((prev) =>
         prev.map((msg) =>
           msg.thinking
@@ -59,8 +54,6 @@ const Chat = () => {
             : msg
         )
       );
-    } finally {
-      setIsThinking(false);
     }
   };
 
@@ -72,29 +65,9 @@ const Chat = () => {
     <div className="chat-container">
       <div className="chat-card">
         <div className="messages">
-          {messages.map((msg, index) => (
-            <div key={index} className={`message-wrapper ${msg.type}`}>
-              {/* Avatar */}
-              <div
-                className="avatar"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  background: msg.type === "bot" ? "#e5e5ea" : "#4f46e5",
-                  color: msg.type === "bot" ? "black" : "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "20px",
-                  marginRight: msg.type === "bot" ? "10px" : "0",
-                  marginLeft: msg.type === "user" ? "10px" : "0",
-                }}
-              >
-                {msg.type === "bot" ? "🤖" : "👤"}
-              </div>
-
-              {/* Message Bubble */}
+          {messages.map((msg, idx) => (
+            <div key={idx} className={`message-wrapper ${msg.type}`}>
+              {msg.type === "bot" && <div className="avatar bot-avatar">🤖</div>}
               <div className={`bubble ${msg.thinking ? "thinking" : ""}`}>
                 {msg.thinking ? (
                   <>
@@ -103,20 +76,19 @@ const Chat = () => {
                     <span></span>
                   </>
                 ) : msg.type === "bot" ? (
-                  <>
-                    <strong>{BOT_NAME}: </strong>
-                    {msg.text}
-                  </>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {`${BOT_NAME}: ${msg.text}`}
+                  </ReactMarkdown>
                 ) : (
                   msg.text
                 )}
               </div>
+              {msg.type === "user" && <div className="avatar user-avatar">👤</div>}
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
         <div className="input-area">
           <input
             type="text"
