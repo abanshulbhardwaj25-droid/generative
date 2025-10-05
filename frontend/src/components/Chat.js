@@ -59,17 +59,7 @@ const Chat = () => {
 
   return (
     <div>
-      <header className="app-header">
-        <div className="header-left">
-          <div className="logo">🤖</div>
-          <h1>LangChain Chatbot</h1>
-        </div>
-        <nav className="header-menu">
-          <a href="#">Home</a>
-          <a href="#">Docs</a>
-          <a href="#">About</a>
-        </nav>
-      </header>
+      
 
       <div className="chat-card">
         <div className="messages">
