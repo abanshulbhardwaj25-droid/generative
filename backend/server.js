@@ -1,9 +1,9 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 
 const app = express();
 const PORT = 5000;
-
+import { getGroqReply } from "./groq.js";
 app.use(cors());
 app.use(express.json());
 // Random response templates
@@ -21,35 +21,30 @@ const responses = [
 ];
 // POST /api/message
 app.post("/api/message", async (req, res) => {
-  try {
+    try {
     const { message } = req.body;
-
-    if (!message || typeof message !== "string") {
-      return res.status(400).json({ error: "Invalid message input" });
-    }
-
-    // Pick a random response template
-    const randomTemplate = responses[Math.floor(Math.random() * responses.length)];
-    
-    // Replace placeholder with user message
-    const botReply = randomTemplate.replace("{{msg}}", message);
-
-    console.log(`User: ${message}`);
-    console.log(`Bot: ${botReply}`);
-
-    // Simulate 2-second delay for realism
-    setTimeout(() => {
-      res.status(200).json({ reply: botReply });
-    }, 2000);
-
-  } catch (error) {
-    console.error("Error:", error);
+    const reply = await getGroqReply(message);
+    res.status(200).json({ reply });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
 app.get("/api/", (req, res) => {
   console.log("DATA AARA H")
   res.json({ reply: 'DATA' });
+});
+
+// GET /api/message?message=your_message
+app.get("/api/message", async (req, res) => {
+    try {
+  
+    const reply = await getGroqReply('i am anshul');
+    res.status(200).json({ reply });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 app.listen(PORT, () => {

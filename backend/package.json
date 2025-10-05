@@ -1,12 +1,19 @@
 {
   "name": "chatbot-backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "@langchain/openai": "^0.6.14",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "groq": "^4.10.2",
+    "groq-sdk": "^0.33.0",
+    "langchain": "^0.3.35",
+    "openai": "^6.1.0"
   }
 }

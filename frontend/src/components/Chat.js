@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles.css";
 
+const BOT_NAME = "GrokBot"; // Bot name define
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -28,7 +30,6 @@ const Chat = () => {
     setMessages((prev) => [...prev, thinkingMsg]);
 
     try {
-      // Replace with your backend API
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/message/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,16 +37,26 @@ const Chat = () => {
       });
       const data = await res.json();
 
-      // Replace thinking message with actual reply
+      let botText = data.reply.reply || "Sorry, no reply.";
+
+      // Ensure bot name not duplicated
+      if (botText.startsWith(`${BOT_NAME}: `)) {
+        botText = botText.replace(`${BOT_NAME}: `, "");
+      }
+
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.thinking ? { ...msg, text: data.reply, thinking: false } : msg
+          msg.thinking
+            ? { ...msg, text: botText, thinking: false, type: "bot" }
+            : msg
         )
       );
     } catch (err) {
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.thinking ? { ...msg, text: "Error from server", thinking: false } : msg
+          msg.thinking
+            ? { ...msg, text: "Error from server", thinking: false, type: "bot" }
+            : msg
         )
       );
     } finally {
@@ -58,28 +69,30 @@ const Chat = () => {
   };
 
   return (
-    <div>
-      
+    <div className="chat-container">
       <div className="chat-card">
         <div className="messages">
           {messages.map((msg, index) => (
             <div key={index} className={`message-wrapper ${msg.type}`}>
-              
-              {/* Bot Avatar */}
-              {msg.type === "bot" && (
-                <div className="avatar" style={{
+              {/* Avatar */}
+              <div
+                className="avatar"
+                style={{
                   width: "40px",
                   height: "40px",
                   borderRadius: "50%",
-                  background: "#e5e5ea",
+                  background: msg.type === "bot" ? "#e5e5ea" : "#4f46e5",
+                  color: msg.type === "bot" ? "black" : "white",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "20px"
-                }}>
-                  🤖
-                </div>
-              )}
+                  fontSize: "20px",
+                  marginRight: msg.type === "bot" ? "10px" : "0",
+                  marginLeft: msg.type === "user" ? "10px" : "0",
+                }}
+              >
+                {msg.type === "bot" ? "🤖" : "👤"}
+              </div>
 
               {/* Message Bubble */}
               <div className={`bubble ${msg.thinking ? "thinking" : ""}`}>
@@ -89,31 +102,21 @@ const Chat = () => {
                     <span></span>
                     <span></span>
                   </>
+                ) : msg.type === "bot" ? (
+                  <>
+                    <strong>{BOT_NAME}: </strong>
+                    {msg.text}
+                  </>
                 ) : (
                   msg.text
                 )}
               </div>
-
-              {/* User Avatar */}
-              {msg.type === "user" && (
-                <div className="avatar" style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  background: "#4f46e5",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "white",
-                  fontSize: "20px"
-                }}>
-                  👤
-                </div>
-              )}
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Input */}
         <div className="input-area">
           <input
             type="text"
