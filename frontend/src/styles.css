@@ -225,7 +225,7 @@ body {
 @media (max-width: 650px) {
   .header-menu a { margin-left: 12px; font-size: 0.8rem; }
   .header-left h1 { font-size: 1.1rem; }
-  .chat-card { width: 95%; min-height: 50vh; }
+  .chat-card { width: 95%; min-height: 90vh; }
   .input-area input { font-size: 0.85rem; }
   .message-wrapper .bubble { max-width: 80%; font-size: 0.85rem; }
 }

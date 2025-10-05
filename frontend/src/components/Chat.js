@@ -60,7 +60,6 @@ const Chat = () => {
   return (
     <div>
       
-
       <div className="chat-card">
         <div className="messages">
           {messages.map((msg, index) => (
@@ -115,7 +114,6 @@ const Chat = () => {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        {`${process.env.REACT_APP_API_URL}/api/message/`} 
         <div className="input-area">
           <input
             type="text"
